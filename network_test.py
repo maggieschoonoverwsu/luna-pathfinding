@@ -1,4 +1,9 @@
 import socket
+import json
+
+def print_float_pairs(pairs):
+    for pair in pairs:
+        print(f"({pair[0]}, {pair[1]})")
 
 def start_server(host='127.0.0.1', port=5000):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -9,15 +14,12 @@ def start_server(host='127.0.0.1', port=5000):
     conn, addr = server_socket.accept()
     print(f"Connected by {addr}")
 
-    data = conn.recv(1024)
-    print(f"Received: {data.decode()}")
-
-    if data.decode().strip().lower() == "shutdown":
-        print("Shutting down server...")
-        conn.sendall(b"Server shutting down")
-        conn.close()
-        server_socket.close()
-        return
+    data = conn.recv(1024).decode()  # Decode received data
+    try:
+        pairs = json.loads(data)  # Deserialize JSON string into list
+        print_float_pairs(pairs)  # Print the pairs correctly
+    except json.JSONDecodeError:
+        print("Error: Received invalid JSON data")
 
     conn.sendall(b"Data received")
     conn.close()
