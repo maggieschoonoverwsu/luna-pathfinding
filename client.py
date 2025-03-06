@@ -11,4 +11,6 @@ def send_data(host='127.0.0.1', port=5000, message="Hello from Client!"):
     client_socket.close()
 
 if __name__ == "__main__":
-    send_data()
+    #host="172.27.84.226"
+    host="127.0.0.1"
+    send_data(host)
